@@ -33,7 +33,7 @@ import org.apache.spark.sql.execution._
 import org.apache.spark.sql.execution.metric.SQLMetrics
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.types.StructType
-import org.apache.spark.util.MutablePair
+import org.apache.spark.util.{MutablePair, SizeEstimator}
 import org.apache.spark.util.collection.unsafe.sort.{PrefixComparators, RecordComparator}
 
 /**
@@ -126,6 +126,7 @@ case class ShuffleExchangeExec(
           shuffleRDD
         case _ =>
           val shuffleDependency = prepareShuffleDependency()
+          log.warn(s"!!!Size of ShuffleDependency: ${SizeEstimator.estimate(shuffleDependency)}")
           preparePostShuffleRDD(shuffleDependency)
       }
     }
