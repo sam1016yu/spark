@@ -17,5 +17,5 @@ do
     grep -F '!!!' raw_output.log >> $result_file
 done
 
-# rm raw_output.log
-# mv $result_file $HOME
+rm raw_output.log
+mv $result_file $HOME
