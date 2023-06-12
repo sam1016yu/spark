@@ -41,7 +41,7 @@ import org.apache.spark.sql.catalyst.util.StringUtils
 import org.apache.spark.sql.internal.SQLConf
 import org.apache.spark.sql.internal.StaticSQLConf.GLOBAL_TEMP_DATABASE
 import org.apache.spark.sql.types.StructType
-import org.apache.spark.util.Utils
+import org.apache.spark.util.{SizeEstimator, Utils}
 
 object SessionCatalog {
   val DEFAULT_DATABASE = "default"
@@ -937,6 +937,8 @@ class SessionCatalog(
     requireNonEmptyValueInPartitionSpec(parts.map(_.spec))
     externalCatalog.createPartitions(
       db, table, partitionWithQualifiedPath(tableName, parts), ignoreIfExists)
+    val partSizes = SizeEstimator.estimate(parts)
+    println(s"!!!partSize:$partSizes")
   }
 
   /**
