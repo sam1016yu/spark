@@ -13,7 +13,7 @@ fi
 
 for rep in 1 2 3
 do
-    bin/spark-shell --master 'local[16]' --conf spark.driver.maxResultSize=128M --driver-memory 4g < $HOME/spark-25947-reproducer.scala  > raw_output.log 2>&1 
+    bin/spark-shell --master 'local[16]' --driver-memory 8g < $HOME/spark-25947-reproducer.scala  > raw_output.log 2>&1 
     grep -F '!!!' raw_output.log >> $result_file
 done
 
