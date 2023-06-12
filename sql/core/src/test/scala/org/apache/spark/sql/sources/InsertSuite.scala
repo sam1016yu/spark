@@ -787,6 +787,22 @@ class InsertSuite extends DataSourceTest with SharedSparkSession {
     }
   }
 
+    test("SPARK-29938") {
+    val table = "partitioned_catalog_table"
+    val numsParts = Seq(100, 200, 300, 400, 500)
+    for (numParts <- numsParts) {
+        println(s"!!!numParts:$numParts")
+        withTable(table) {
+          val df = (1 to numParts).map(i => (i, i)).toDF("part", "col1")
+          val tempTable = "partitioned_catalog_temp_table"
+          df.createOrReplaceTempView(tempTable)
+          sql(s"CREATE TABLE $table (part Int, col1 Int) USING parquet PARTITIONED BY (part)")
+          sql(s"INSERT INTO TABLE $table SELECT * from $tempTable")
+        }
+    }
+
+  }
+
   test("Stop task set if FileAlreadyExistsException was thrown") {
     withSQLConf("fs.file.impl" -> classOf[FileExistingTestFileSystem].getName,
         "fs.file.impl.disable.cache" -> "true") {
