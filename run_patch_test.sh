@@ -3,7 +3,7 @@
 cd $HOME/spark
 
 # compile spark
-sbt package
+sbt package > /dev/null
 
 result_file=raw_result_before
 
